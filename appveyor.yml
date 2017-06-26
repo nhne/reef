@@ -41,7 +41,11 @@ test_script:
 #  modified to test specific tests
   - cmd: cd .\lang\cs
   - cmd: .\.nuget\nuget.exe restore .\.nuget\packages.config -o .\packages
-  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.TEsts.dll -method Org.Apache.REEF.Tests.Functional.IMRU.IMRUCloseTaskTest.TestTaskCloseOnLocalRuntime
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.Failure.TestEvaluatorWithActiveContextImmediatePoison.TestPoisonedActiveContextHandlerImmediate
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.ML.KMeans.TestKMeans.TestKMeansOnLocalRuntimeWithGroupCommunications
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.IMRU.TestFailMapperEvaluatorsOnDispose.TestFailedMapperOnLocalRuntime
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.IMRU.TestFailMapperEvaluatorOnWaitingForEvaluatorAndExecution.TestFailedMapperOnYarn
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.IMRU.TestFailMapperEvaluatorOnWaitingForEvaluatorAndExecution.TestFailedMapperOnLocalRuntime
 
 notifications:
   - provider: Email
