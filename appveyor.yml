@@ -38,10 +38,14 @@ build_script:
 
 test_script:
 #  - cmd: msbuild .\lang\cs\TestRunner.proj /p:Configuration="Debug" /p:Platform="x64"
+# test to yarn
   - cmd: cd .\lang\cs
   - cmd: .\.nuget\nuget.exe restore .\.nuget\packages.config -o .\packages
   - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.IMRU.TestFailMapperEvaluatorOnWaitingForEvaluatorAndExecution.TestFailedMapperOnLocalRuntime
   - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.IMRU.TestFailMapperEvaluatorOnWaitingForEvaluatorAndExecution.TestFailedMapperOnYarn
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.Group.ScatterReduceTest.TestScatterAndReduceOnYarn
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.IMRU.TestFailMapperTasks.TestFailedMapperOnYarn
+  - cmd: .\packages\xunit.runner.console.2.1.0\tools\xunit.console.exe .\bin\x64\Debug\Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.dll -method Org.Apache.REEF.Tests.Functional.Failure.User.UnhandledTaskExceptionInTaskTest.TestUnhandledTaskExceptionDoesntCrashEvaluator
 
 notifications:
   - provider: Email
