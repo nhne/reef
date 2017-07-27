@@ -183,10 +183,25 @@ public final class AvroConfigurationSerializer implements ConfigurationSerialize
             .setValue(val)
             .build());
       }
+      for (final NamedParameterNode<List<?>> np : configuration.getBoundLists()) {
+        for (final Object value : configuration.getBoundList(np)) {
+          if (value instanceof List) {
+            //final String val;
+            final List list = (List) value;
+            for (Object o : list) {
+              System.out.println(o);
+            }
+            //configurationEntries.add(ConfigurationEntry.newBuilder().setKey(np.getFullName()).setValue(val).build());
+          } else {
+            throw new IllegalStateException("The value bound to a given NamedParameterNode "
+                    + np + " is neither the set of class hierarchy nodes nor strings.");
+          }
+        }
+      }
     }
     // TODO[JIRA REEF-402]: Implement list serialization
     if (configuration.getBoundLists() != null && !configuration.getBoundLists().isEmpty()) {
-      throw new NotImplementedException("List serialization/deserialization is not supported");
+      //throw new NotImplementedException("List serialization/deserialization is not supported");
     }
 
     return AvroConfiguration.newBuilder().setLanguage(JAVA).setBindings(configurationEntries).build();

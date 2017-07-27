@@ -39,7 +39,8 @@ public abstract class RoundTripTest {
   @Test
   public void testRoundTrip() throws Exception {
     // TODO[JIRA REEF-1009]: use 'getConfiguration' instead of 'getConfigurationWithoutList' after REEF-402 is fixed
-    final Configuration conf = ObjectTreeTest.getConfigurationWithoutList();
+    // TODO: REVERT TO WITHOUTLIST WHEN COMMIT LAST
+    final Configuration conf = ObjectTreeTest.getConfiguration();
     final RootInterface before = Tang.Factory.getTang().newInjector(conf).getInstance(RootInterface.class);
     final RootInterface after = Tang.Factory.getTang().newInjector(roundTrip(conf)).getInstance(RootInterface.class);
     Assert.assertEquals("Configuration conversion to and from Avro datatypes failed.", before, after);
@@ -48,7 +49,8 @@ public abstract class RoundTripTest {
   @Test
   public void testRoundTripWithClassHierarchy() throws Exception {
     // TODO[JIRA REEF-1009]: use 'getConfiguration' instead of 'getConfigurationWithoutList' after REEF-402 is fixed
-    final Configuration confBefore = ObjectTreeTest.getConfigurationWithoutList();
+    // TODO: REVERT TO WITHOUTLIST WHEN COMMIT LAST
+    final Configuration confBefore = ObjectTreeTest.getConfiguration();
     final AvroClassHierarchySerializer chSerializer = new AvroClassHierarchySerializer();
     final ClassHierarchy c = chSerializer.fromAvro(chSerializer.toAvro(confBefore.getClassHierarchy()));
     final Configuration confAfter = roundTrip(confBefore, c);
