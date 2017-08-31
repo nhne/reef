@@ -60,10 +60,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.apache.reef.wake.remote.RemoteConfiguration.PROTOCOL_HTTP;
-import static org.apache.reef.wake.remote.RemoteConfiguration.PROTOCOL_HTTPS;
-import static org.apache.reef.wake.remote.RemoteConfiguration.PROTOCOL_TCP;
 import static org.apache.reef.wake.remote.transport.netty.NettyChannelInitializer.ChannelType;
+import static org.apache.reef.wake.remote.transport.TransportFactory.ProtocolTypes;
 
 /**
  * Messaging transport implementation with Netty and Http.
@@ -130,7 +128,7 @@ public final class NettyMessagingTransport implements Transport {
       @Parameter(RemoteConfiguration.RetryTimeout.class) final int retryTimeout,
       final TcpPortProvider tcpPortProvider,
       final LocalAddressProvider localAddressProvider,
-      @Parameter(RemoteConfiguration.Protocol.class) final String protocolType) {
+      @Parameter(RemoteConfiguration.Protocol.class) final ProtocolTypes protocolType) {
 
     int p = port;
     if (p < 0) {
@@ -144,7 +142,7 @@ public final class NettyMessagingTransport implements Transport {
 
     supportsSSL = System.getProperty("ssl") != null;
 
-    if (protocolType.equals(PROTOCOL_HTTPS)) {
+    if (protocolType == ProtocolTypes.HTTPS) {
       if (supportsSSL) {
         try {
           final SelfSignedCertificate ssc = new SelfSignedCertificate();
@@ -166,7 +164,7 @@ public final class NettyMessagingTransport implements Transport {
     } else { // for HTTP and default Netty
       sslContextClient = null;
       sslContextServer = null;
-      if (protocolType.equals(PROTOCOL_HTTP)) {
+      if (protocolType == ProtocolTypes.HTTP) {
         this.uri = URI.create("http://" + hostAddress);
       } else {
         this.uri = null;
@@ -175,7 +173,7 @@ public final class NettyMessagingTransport implements Transport {
 
     this.numberOfTries = numberOfTries;
     this.retryTimeout = retryTimeout;
-    if (protocolType.equals(PROTOCOL_TCP)) {
+    if (protocolType == ProtocolTypes.TCP) {
       this.clientEventListener = new NettyClientEventListener(this.addrToLinkRefMap, clientStage);
       this.serverEventListener = new NettyServerEventListener(this.addrToLinkRefMap, serverStage);
     } else {
@@ -196,7 +194,7 @@ public final class NettyMessagingTransport implements Transport {
         .channel(NioSocketChannel.class)
         .handler(new NettyChannelInitializer(new NettyDefaultChannelHandlerFactory("client",
             this.clientChannelGroup, this.clientEventListener), sslContextClient,
-                protocolType.equals(PROTOCOL_TCP) ? ChannelType.TCP : ChannelType.HTTP_CLIENT))
+                protocolType == ProtocolTypes.TCP ? ChannelType.TCP : ChannelType.HTTP_CLIENT))
         .option(ChannelOption.SO_REUSEADDR, true)
         .option(ChannelOption.SO_KEEPALIVE, true);
 
@@ -205,7 +203,7 @@ public final class NettyMessagingTransport implements Transport {
         .channel(NioServerSocketChannel.class)
         .childHandler(new NettyChannelInitializer(new NettyDefaultChannelHandlerFactory("server",
             this.serverChannelGroup, this.serverEventListener), sslContextServer,
-                protocolType.equals(PROTOCOL_TCP) ? ChannelType.TCP : ChannelType.HTTP_SERVER))
+                protocolType == ProtocolTypes.TCP ? ChannelType.TCP : ChannelType.HTTP_SERVER))
         .option(ChannelOption.SO_BACKLOG, 128)
         .option(ChannelOption.SO_REUSEADDR, true)
         .childOption(ChannelOption.SO_KEEPALIVE, true);

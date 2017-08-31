@@ -183,7 +183,7 @@ public final class MessagingTransportFactory implements TransportFactory {
     injector.bindVolatileParameter(RemoteConfiguration.NumberOfTries.class, numberOfTries);
     injector.bindVolatileParameter(RemoteConfiguration.RetryTimeout.class, retryTimeout);
     injector.bindVolatileInstance(TcpPortProvider.class, tcpPortProvider);
-    injector.bindVolatileParameter(RemoteConfiguration.Protocol.class, protocol.name());
+    injector.bindVolatileParameter(RemoteConfiguration.Protocol.class, protocol);
     try {
       return injector.getInstance(NettyMessagingTransport.class);
     } catch (final InjectionException e) {
